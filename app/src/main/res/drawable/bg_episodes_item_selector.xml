@@ -2,7 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/bg_episodes_item_focus_shape" android:state_focused="true"/>
-    <item android:drawable="@drawable/bg_episodes_item_focus_shape" android:state_selected="true"/>
-
     <item android:drawable="@drawable/bg_episodes_item_normal_shape"/>
 </selector>

@@ -25,6 +25,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
 
     int parentWidth,itemWidth;
 
+    int mCurrentPosition;
+
     public GroupAdapter(List<String> datas) {
         mDatas = datas;
     }
@@ -45,6 +47,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.tv.setText(mDatas.get(position));
         holder.tv.setWidth(itemWidth);
+        holder.tv.setFocusable(true);
         holder.tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +60,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     mItemFocusListener.onGroupItemFocus(v, position, hasFocus);
+                    mCurrentPosition = position;
                 }
             }
         });
@@ -67,6 +71,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         return mDatas.size();
     }
 
+    public int getCurrentPosition() {
+        return mCurrentPosition;
+    }
 
     public void setOnItemFocusListener(OnItemFocusListener listener) {
         mItemFocusListener = listener;

@@ -26,6 +26,8 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
 
     int parentWidth, itemWidth;
 
+    int mCurrentPosition;
+
     public EpisodesAdapter(List<String> data) {
         mData = data;
     }
@@ -61,6 +63,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     mFocusListener.onEpisodesItemFocus(v, position, hasFocus);
+                    mCurrentPosition = position;
                 }
             }
         });
@@ -69,6 +72,14 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public int getCurrentPosition() {
+        return mCurrentPosition;
+    }
+
+    public int getItemWidth() {
+        return itemWidth;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

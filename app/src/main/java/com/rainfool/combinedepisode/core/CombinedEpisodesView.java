@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,6 +28,8 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
     LinearLayoutManager mEpisodesLayoutManager, mGroupLayoutManager;
 
     CombinedEpisodesAdapter mAdapter;
+    EpisodesAdapter mEpisodesAdapter;
+    GroupAdapter mGroupAdapter;
 
     public CombinedEpisodesView(Context context) {
         this(context, null);
@@ -68,10 +71,12 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
 
     public void setAdapter(final CombinedEpisodesAdapter adapter) {
         mAdapter = adapter;
-        mEpisodesView.setAdapter(adapter.getEpisodesAdapter());
-        mGroupsView.setAdapter(adapter.getGroupAdapter());
+        mEpisodesAdapter = adapter.getEpisodesAdapter();
+        mGroupAdapter = adapter.getGroupAdapter();
+        mEpisodesView.setAdapter(mEpisodesAdapter);
+        mGroupsView.setAdapter(mGroupAdapter);
 
-        adapter.getGroupAdapter().setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
+        mGroupAdapter.setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
             @Override
             public void onGroupItemClick(View view, int position) {
                 Log.d(TAG, "group item " + position + " has been clicked;Episodes scroll to "
@@ -79,16 +84,23 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                 mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
             }
         });
-        adapter.getGroupAdapter().setOnItemFocusListener(new GroupAdapter.OnItemFocusListener() {
+        mGroupAdapter.setOnItemFocusListener(new GroupAdapter.OnItemFocusListener() {
             @Override
             public void onGroupItemFocus(View view, int position, boolean hasFocus) {
                 Log.d(TAG, "group item " + position + " has been focused;Episodes scroll to "
                         + adapter.getEpisodesPosition(position));
+                int episodePosition = adapter.getEpisodesPosition(position);
+
                 mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
+                if (mEpisodesView.getChildCount() - 1 - episodePosition < 10) {
+                    int scrollX = mEpisodesAdapter.getItemWidth() * (mEpisodesView.getChildCount() - 1 - episodePosition);
+                    Log.d(TAG,"episode scoll x :" + scrollX);
+                    mEpisodesView.setTranslationX(scrollX);
+                }
             }
         });
 
-        adapter.getEpisodesAdapter().setOnItemFocusListener(new EpisodesAdapter.OnItemFocusListener() {
+        mEpisodesAdapter.setOnItemFocusListener(new EpisodesAdapter.OnItemFocusListener() {
             @Override
             public void onEpisodesItemFocus(View view, int position, boolean hasFocus) {
                 if (hasFocus) {
@@ -100,7 +112,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
             }
         });
 
-        adapter.getEpisodesAdapter().setOnItemClickListener(new EpisodesAdapter.OnItemClickListener() {
+        mEpisodesAdapter.setOnItemClickListener(new EpisodesAdapter.OnItemClickListener() {
             @Override
             public void onEpisodesItemClick(View view, int position) {
                 Log.d(TAG, "episodes item " + position);
@@ -122,16 +134,49 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
     }
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_UP) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    if (mGroupsView.hasFocus()) {
+                        Log.d(TAG,"test group has focus when dpad UP click");
+                        mEpisodesView.requestFocus();
+                        return true;
+                    }
+                    break;
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    if (mEpisodesView.hasFocus()) {
+                        Log.d(TAG,"test group has focus when dpad DOWN click");
+                        mGroupsView.requestFocus();
+                        return true;
+                    }
+                    break;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (v == this && hasFocus) {
             Log.d(TAG, "content panel has focus");
             mEpisodesView.requestFocus();
         }
-        if (v == mEpisodesView && hasFocus) {
+        else if (v == mEpisodesView && hasFocus) {
 
             Log.d(TAG, "episodes has focus");
-            //TODO
-            mEpisodesView.getChildAt(0).requestFocus();
+            View child = mEpisodesView.getChildAt(mEpisodesAdapter.getCurrentPosition());
+            if (child != null) {
+                child.requestFocus();
+            }
+        }
+        else if (v == mGroupsView && hasFocus) {
+            Log.d(TAG,"group has focus，position:" + mGroupAdapter.getCurrentPosition());
+
+            View child = mGroupsView.getChildAt(mGroupAdapter.getCurrentPosition());
+            if (child != null) {
+                child.requestFocus();
+            }
         }
     }
 }

@@ -24,9 +24,10 @@ public class MainActivity extends AppCompatActivity {
         mCombinedEpisodesView = (CombinedEpisodesView) findViewById(R.id.combinedEpisodes);
 
 
-        final String[] episodes = {"第一集", "第二集", "第三集", "第四集", "第五集"
-                , "第1集", "第2集", "第3集", "第4集", "第5集"
-                , "第6集", "第7集", "第8集", "第9集", "第10集"
+        final String[] episodes = {
+                "第1集", "第2集", "第3集", "第4集", "第5集",
+                "第6集", "第7集", "第8集", "第9集", "第10集",
+                "第一集", "第二集", "第三集", "第四集", "第五集",
         };
 
         final String[] groups = {"1-10", "11-15"};
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getEpisodesPosition(int groupPosition) {
-                return groupPosition * 5;
+                return groupPosition * 10;
             }
 
             @Override
@@ -61,6 +62,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 mCombinedEpisodesView.requestFocus();
             }
-        },300);
+        }, 300);
     }
 }
