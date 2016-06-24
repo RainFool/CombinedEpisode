@@ -1,6 +1,7 @@
 package com.rainfool.combinedepisode.core;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,15 @@ import java.util.List;
  */
 public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyViewHolder> {
 
+    private static final int EPISODES_COLUMN_COUNT = 10;
+
     OnItemClickListener mClickListener;
     OnItemLongFocusListener mLongFocusListener;
     OnItemFocusListener mFocusListener;
 
     List<String> mData;
+
+    int parentWidth, itemWidth;
 
     public EpisodesAdapter(List<String> data) {
         mData = data;
@@ -31,6 +36,10 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.episodes_item_layout, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
+        parentWidth = parent.getMeasuredWidth();
+        itemWidth = (parentWidth -
+                (holder.tv.getPaddingLeft() + holder.tv.getPaddingRight()) * (EPISODES_COLUMN_COUNT))
+                / EPISODES_COLUMN_COUNT + 1;
         return holder;
     }
 
@@ -38,6 +47,8 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         holder.tv.setText(mData.get(position));
+        holder.tv.setWidth(itemWidth);
+        Log.d(CombinedEpisodesView.TAG, "episodes item width :" + itemWidth + " position:" + position);
         holder.tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

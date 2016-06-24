@@ -17,23 +17,23 @@ import com.rainfool.combinedepisode.R;
  * Created by rainfool on 16/6/22.
  * 联动的剧集列表
  */
-public class CombinedEpisodesView extends RelativeLayout implements View.OnFocusChangeListener{
+public class CombinedEpisodesView extends RelativeLayout implements View.OnFocusChangeListener {
 
     public static final String TAG = CombinedEpisodesView.class.getSimpleName();
 
     Context mContext;
     RelativeLayout mContentPanel;
-    RecyclerView mEpisodes,mGroups;
-    LinearLayoutManager mEpisodesLayoutManager,mGroupLayoutManager;
+    RecyclerView mEpisodesView, mGroupsView;
+    LinearLayoutManager mEpisodesLayoutManager, mGroupLayoutManager;
 
     CombinedEpisodesAdapter mAdapter;
 
     public CombinedEpisodesView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public CombinedEpisodesView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public CombinedEpisodesView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -46,44 +46,53 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
 
     private void init() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        inflater.inflate(R.layout.combined_episodes_layout,this,true);
+        inflater.inflate(R.layout.combined_episodes_layout, this, true);
 
-        mEpisodes = (RecyclerView) findViewById(R.id.episodes);
-        mGroups = (RecyclerView) findViewById(R.id.groups);
+        mEpisodesView = (RecyclerView) findViewById(R.id.episodes);
+        mGroupsView = (RecyclerView) findViewById(R.id.groups);
 
-        mEpisodesLayoutManager = new LinearLayoutManager(mContext, LinearLayout.HORIZONTAL,false);
-        mGroupLayoutManager = new LinearLayoutManager(mContext, LinearLayout.HORIZONTAL,false);
+        mEpisodesLayoutManager = new LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false);
+        mGroupLayoutManager = new LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false);
 
-        mEpisodes.setLayoutManager(mEpisodesLayoutManager);
-        mGroups.setLayoutManager(mGroupLayoutManager);
+        mEpisodesView.setLayoutManager(mEpisodesLayoutManager);
+        mGroupsView.setLayoutManager(mGroupLayoutManager);
 
-        mEpisodes.setItemAnimator(new DefaultItemAnimator());
-        mGroups.setItemAnimator(new DefaultItemAnimator());
+        mEpisodesView.setItemAnimator(new DefaultItemAnimator());
+        mGroupsView.setItemAnimator(new DefaultItemAnimator());
 
-        mEpisodes.setOnFocusChangeListener(this);
-        mGroups.setOnFocusChangeListener(this);
+        mEpisodesView.setOnFocusChangeListener(this);
+        mGroupsView.setOnFocusChangeListener(this);
         this.setOnFocusChangeListener(this);
     }
 
 
     public void setAdapter(final CombinedEpisodesAdapter adapter) {
         mAdapter = adapter;
-        mEpisodes.setAdapter(adapter.getEpisodesAdapter());
-        mGroups.setAdapter(adapter.getGroupAdapter());
+        mEpisodesView.setAdapter(adapter.getEpisodesAdapter());
+        mGroupsView.setAdapter(adapter.getGroupAdapter());
 
         adapter.getGroupAdapter().setOnItemClickListener(new GroupAdapter.OnItemClickListener() {
             @Override
             public void onGroupItemClick(View view, int position) {
-                Log.d(TAG,"group item " + position + " has been clicked;Episodes scroll to "
+                Log.d(TAG, "group item " + position + " has been clicked;Episodes scroll to "
                         + adapter.getEpisodesPosition(position));
-                mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position),0);
+                mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
             }
         });
+        adapter.getGroupAdapter().setOnItemFocusListener(new GroupAdapter.OnItemFocusListener() {
+            @Override
+            public void onGroupItemFocus(View view, int position, boolean hasFocus) {
+                Log.d(TAG, "group item " + position + " has been focused;Episodes scroll to "
+                        + adapter.getEpisodesPosition(position));
+                mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
+            }
+        });
+
         adapter.getEpisodesAdapter().setOnItemFocusListener(new EpisodesAdapter.OnItemFocusListener() {
             @Override
             public void onEpisodesItemFocus(View view, int position, boolean hasFocus) {
                 if (hasFocus) {
-                    Log.d(TAG,"episodes item " + position + "has ben focus;group item"
+                    Log.d(TAG, "episodes item " + position + "has ben focus;group item"
                             + adapter.getGroupPosition(position) + "need be selected!");
                     mGroupLayoutManager.scrollToPosition(position);
                     setSelectedGroup(adapter.getGroupPosition(position));
@@ -94,20 +103,20 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
         adapter.getEpisodesAdapter().setOnItemClickListener(new EpisodesAdapter.OnItemClickListener() {
             @Override
             public void onEpisodesItemClick(View view, int position) {
-                Log.d(TAG,"episodes item " + position);
+                Log.d(TAG, "episodes item " + position);
             }
         });
     }
 
 
     protected void setSelectedGroup(int position) {
-        mGroups.getChildAt(position).setSelected(true);
-        int count = mGroups.getChildCount();
-        for(int i = 0; i < count; i ++) {
+        mGroupsView.getChildAt(position).setSelected(true);
+        int count = mGroupsView.getChildCount();
+        for (int i = 0; i < count; i++) {
             if (i == position) {
-                mGroups.getChildAt(i).setSelected(true);
-            }else {
-                mGroups.getChildAt(i).setSelected(false);
+                mGroupsView.getChildAt(i).setSelected(true);
+            } else {
+                mGroupsView.getChildAt(i).setSelected(false);
             }
         }
     }
@@ -115,13 +124,14 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (v == this && hasFocus) {
-            Log.d(TAG,"content panel has focus");
-            mEpisodes.requestFocus();
+            Log.d(TAG, "content panel has focus");
+            mEpisodesView.requestFocus();
         }
-        if (v == mEpisodes && hasFocus) {
+        if (v == mEpisodesView && hasFocus) {
 
-            Log.d(TAG,"episodes has focus");
-            mEpisodes.getChildAt(0).requestFocus();
+            Log.d(TAG, "episodes has focus");
+            //TODO
+            mEpisodesView.getChildAt(0).requestFocus();
         }
     }
 }
