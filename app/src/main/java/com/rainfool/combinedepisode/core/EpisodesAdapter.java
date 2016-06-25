@@ -48,30 +48,38 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        holder.tv.setText(mData.get(position));
-        holder.tv.setWidth(itemWidth);
-        Log.d(CombinedEpisodesView.TAG, "episodes item width :" + itemWidth + " position:" + position);
-        holder.tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mClickListener.onEpisodesItemClick(v, position);
-            }
-        });
-        holder.tv.setFocusable(true);
-        holder.tv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    mFocusListener.onEpisodesItemFocus(v, position, hasFocus);
-                    mCurrentPosition = position;
+        if (position < mData.size()) {
+            holder.tv.setText(mData.get(position));
+            holder.tv.setWidth(itemWidth);
+            holder.tv.setVisibility(View.VISIBLE);
+            Log.d(CombinedEpisodesView.TAG, "episodes item width :" + itemWidth + " position:" + position);
+            holder.tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onEpisodesItemClick(v, position);
                 }
-            }
-        });
+            });
+            holder.tv.setFocusable(true);
+            holder.tv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        mFocusListener.onEpisodesItemFocus(v, position, hasFocus);
+                        mCurrentPosition = position;
+                    }
+                }
+            });
+        } else {
+            holder.tv.setText("");
+            holder.tv.setWidth(itemWidth);
+            holder.tv.setVisibility(View.INVISIBLE);
+            holder.tv.setFocusable(false);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData.size() + EPISODES_COLUMN_COUNT;
     }
 
     public int getCurrentPosition() {

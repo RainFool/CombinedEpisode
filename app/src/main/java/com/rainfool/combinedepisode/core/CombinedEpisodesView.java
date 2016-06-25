@@ -90,13 +90,8 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                 Log.d(TAG, "group item " + position + " has been focused;Episodes scroll to "
                         + adapter.getEpisodesPosition(position));
                 int episodePosition = adapter.getEpisodesPosition(position);
-
+                setSelectedGroup(position);
                 mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
-                if (mEpisodesView.getChildCount() - 1 - episodePosition < 10) {
-                    int scrollX = mEpisodesAdapter.getItemWidth() * (mEpisodesView.getChildCount() - 1 - episodePosition);
-                    Log.d(TAG,"episode scoll x :" + scrollX);
-                    mEpisodesView.setTranslationX(scrollX);
-                }
             }
         });
 
@@ -121,7 +116,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
     }
 
 
-    protected void setSelectedGroup(int position) {
+    private void setSelectedGroup(int position) {
         mGroupsView.getChildAt(position).setSelected(true);
         int count = mGroupsView.getChildCount();
         for (int i = 0; i < count; i++) {
