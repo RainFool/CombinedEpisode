@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
         final String[] groups = {"1-3", "4-6","7-9","10-13","13-15"};
 
-        CombinedEpisodesAdapter<String> adapter = new CombinedEpisodesAdapter<String>() {
+        final Integer[] selectedPositions = {1,2,3,4,6};
+
+        final CombinedEpisodesAdapter<String> adapter = new CombinedEpisodesAdapter<String>() {
             @Override
             public List<String> getEpisodesList() {
                 return Arrays.asList(episodes);
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                adapter.setSelectedPositions(Arrays.asList(selectedPositions));
+                mCombinedEpisodesView.setAdapter(adapter);
                 mCombinedEpisodesView.requestFocus();
             }
         }, 300);

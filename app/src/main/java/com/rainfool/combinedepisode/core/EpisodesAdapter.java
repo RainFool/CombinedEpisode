@@ -23,6 +23,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     OnItemFocusListener mFocusListener;
 
     List<String> mData;
+    List<Integer> mSelectedPositions;
 
     int parentWidth, itemWidth;
 
@@ -44,6 +45,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
                 / EPISODES_COLUMN_COUNT + 1;
         return holder;
     }
+
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
@@ -69,6 +71,9 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
                     }
                 }
             });
+            if (mSelectedPositions != null && mSelectedPositions.contains(position)) {
+                holder.tv.setSelected(true);
+            }
 
         } else {
             holder.tv.setText("");
@@ -93,6 +98,14 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
 
     public List<String> getData() {
         return mData;
+    }
+
+    public List<Integer> getSelectedPositions() {
+        return mSelectedPositions;
+    }
+
+    public void setSelectedPositions(List<Integer> mPositions) {
+        this.mSelectedPositions = mPositions;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

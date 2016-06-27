@@ -28,6 +28,10 @@ public abstract class CombinedEpisodesAdapter <T>{
         return mGroupAdapter;
     }
 
+    public void setSelectedPositions(List<Integer> positions) {
+        mEpisodesAdapter.setSelectedPositions(positions);
+    }
+
     /**
      * @return 剧集部分的显示内容
      */
