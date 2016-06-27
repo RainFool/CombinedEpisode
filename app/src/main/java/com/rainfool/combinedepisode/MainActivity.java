@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
                 "第一集", "第二集", "第三集", "第四集", "第五集",
         };
 
-        final String[] groups = {"1-3", "4-6","7-9","10-13","13-15"};
+        final String[] groups = {"1-3", "4-6", "7-9", "10-13", "13-15"};
 
-        final Integer[] selectedPositions = {1,2,3,4,6};
+        final Integer[] selectedPositions = {1, 2, 3, 4, 6};
 
         final CombinedEpisodesAdapter<String> adapter = new CombinedEpisodesAdapter<String>() {
             @Override
@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
         mCombinedEpisodesView.setAdapter(adapter);
 
         Handler handler = new Handler();
+        adapter.setSelectedPositions(Arrays.asList(selectedPositions));
+        mCombinedEpisodesView.setAdapter(adapter);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.setSelectedPositions(Arrays.asList(selectedPositions));
-                mCombinedEpisodesView.setAdapter(adapter);
                 mCombinedEpisodesView.requestFocus();
             }
         }, 300);

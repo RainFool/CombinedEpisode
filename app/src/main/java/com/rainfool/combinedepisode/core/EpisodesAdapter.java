@@ -1,5 +1,7 @@
 package com.rainfool.combinedepisode.core;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,8 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
 
     private static final int EPISODES_COLUMN_COUNT = 10;
 
+    public static final int LONG_FOCUS_TIME = 2000;
+
     OnItemClickListener mClickListener;
     OnItemLongFocusListener mLongFocusListener;
     OnItemFocusListener mFocusListener;
@@ -28,6 +32,8 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     int parentWidth, itemWidth;
 
     int mCurrentPosition;
+
+    Handler mHandler = new Handler(Looper.getMainLooper());
 
     public EpisodesAdapter(List<String> data) {
         mData = data;
@@ -62,12 +68,16 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
                 }
             });
             holder.tv.setFocusable(true);
+            final LongFocusRunnable longFocusRunnable = new LongFocusRunnable(holder.tv, position);
             holder.tv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
+                public void onFocusChange(final View v, boolean hasFocus) {
                     if (hasFocus) {
                         mFocusListener.onEpisodesItemFocus(v, position, hasFocus);
                         mCurrentPosition = position;
+                        mHandler.postDelayed(longFocusRunnable, LONG_FOCUS_TIME);
+                    } else {
+                        mHandler.removeCallbacks(longFocusRunnable);
                     }
                 }
             });
@@ -82,6 +92,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
             holder.tv.setFocusable(false);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -135,12 +146,26 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     }
 
     public interface OnItemLongFocusListener {
-        void onEpisodesItemLongFocus();
+        void onEpisodesItemLongFocus(View v, int position);
     }
 
     public interface OnItemFocusListener {
         void onEpisodesItemFocus(View view, int position, boolean hasFocus);
     }
 
+    class LongFocusRunnable implements Runnable {
 
+        View v;
+        int position;
+
+        public LongFocusRunnable(View v, int position) {
+            this.v = v;
+            this.position = position;
+        }
+
+        @Override
+        public void run() {
+            mLongFocusListener.onEpisodesItemLongFocus(v, position);
+        }
+    }
 }

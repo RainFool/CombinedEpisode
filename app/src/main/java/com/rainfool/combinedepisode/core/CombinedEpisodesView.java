@@ -116,8 +116,17 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
         mEpisodesAdapter.setOnItemClickListener(new EpisodesAdapter.OnItemClickListener() {
             @Override
             public void onEpisodesItemClick(View view, int position) {
-                Log.d(TAG, "episodes item " + position);
+                Log.d(TAG, "No Episodes Item click listener set!episodes item " + position);
             }
+        });
+
+        mEpisodesAdapter.setOnItemLongFocusListener(new EpisodesAdapter.OnItemLongFocusListener() {
+            @Override
+            public void onEpisodesItemLongFocus(View v, int position) {
+
+                Log.d(TAG, "No Episodes Item long focus listener set!episodes item " + position);
+            }
+
         });
     }
 
