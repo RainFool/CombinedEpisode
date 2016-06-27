@@ -28,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
                 "第1集", "第2集", "第3集", "第4集", "第5集",
                 "第6集", "第7集", "第8集", "第9集", "第10集",
                 "第一集", "第二集", "第三集", "第四集", "第五集",
+                "第六集", "第七集", "第八集", "第九集", "第十集"
         };
 
-        final String[] groups = {"1-3", "4-6", "7-9", "10-13", "13-15"};
+        final String[] groups = {"1-3", "4-6", "7-9", "10-13", "13-15","16-18","19-20"};
 
         final Integer[] selectedPositions = {1, 2, 3, 4, 6};
 

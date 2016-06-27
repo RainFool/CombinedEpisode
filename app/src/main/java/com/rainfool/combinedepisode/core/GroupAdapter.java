@@ -34,7 +34,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.episodes_item_layout, parent, false);
+                .inflate(R.layout.groups_item_layout, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         parentWidth = parent.getMeasuredWidth();
         itemWidth = (parentWidth -

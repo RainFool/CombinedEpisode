@@ -59,15 +59,18 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
         if (position < mData.size()) {
             holder.tv.setText(mData.get(position));
             holder.tv.setWidth(itemWidth);
+            holder.tv.setFocusable(true);
             holder.tv.setVisibility(View.VISIBLE);
+            holder.tv.setSelected(false);
             Log.d(CombinedEpisodesView.TAG, "episodes item width :" + itemWidth + " position:" + position);
+
             holder.tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mClickListener.onEpisodesItemClick(v, position);
                 }
             });
-            holder.tv.setFocusable(true);
+
             final LongFocusRunnable longFocusRunnable = new LongFocusRunnable(holder.tv, position);
             holder.tv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -81,6 +84,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
                     }
                 }
             });
+
             if (mSelectedPositions != null && mSelectedPositions.contains(position)) {
                 holder.tv.setSelected(true);
             }

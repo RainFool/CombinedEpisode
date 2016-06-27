@@ -3,6 +3,7 @@ package com.rainfool.combinedepisode.core;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -95,7 +96,6 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                         + adapter.getEpisodesPosition(position));
                 int episodePosition = adapter.getEpisodesPosition(position);
                 mEpisodesAdapter.mCurrentPosition = episodePosition;
-                setSelectedGroup(position);
                 mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
             }
         });
@@ -106,9 +106,9 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                 if (hasFocus) {
                     Log.d(TAG, "episodes item " + position + "has ben focus;group item"
                             + adapter.getGroupPosition(position) + "need be selected!");
-                    mGroupLayoutManager.scrollToPosition(position);
-                    setSelectedGroup(adapter.getGroupPosition(position));
-                    mGroupAdapter.mCurrentPosition = adapter.getGroupPosition(position);
+                    int groupPosition = adapter.getGroupPosition(position);
+                    mGroupLayoutManager.scrollToPositionWithOffset(groupPosition,0);
+                    mGroupAdapter.mCurrentPosition = adapter.getGroupPosition(groupPosition);
                 }
             }
         });
@@ -128,19 +128,6 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
             }
 
         });
-    }
-
-
-    private void setSelectedGroup(int position) {
-        mGroupsView.getChildAt(position).setSelected(true);
-        int count = mGroupsView.getChildCount();
-        for (int i = 0; i < count; i++) {
-            if (i == position) {
-                mGroupsView.getChildAt(i).setSelected(true);
-            } else {
-                mGroupsView.getChildAt(i).setSelected(false);
-            }
-        }
     }
 
     @Override
