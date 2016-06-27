@@ -1,6 +1,8 @@
 package com.rainfool.combinedepisode.core;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,8 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
     CombinedEpisodesAdapter mAdapter;
     EpisodesAdapter mEpisodesAdapter;
     GroupAdapter mGroupAdapter;
+
+    Handler mHandler = new Handler(Looper.getMainLooper());
 
     public CombinedEpisodesView(Context context) {
         this(context, null);
@@ -136,21 +140,21 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (mGroupsView.hasFocus()) {
-                        Log.d(TAG,"test group has focus when dpad UP click");
+                        Log.d(TAG, "test group has focus when dpad UP click");
                         mEpisodesView.requestFocus();
                         return true;
                     }
                     break;
                 case KeyEvent.KEYCODE_DPAD_DOWN:
                     if (mEpisodesView.hasFocus()) {
-                        Log.d(TAG,"test group has focus when dpad DOWN click");
+                        Log.d(TAG, "test group has focus when dpad DOWN click");
                         mGroupsView.requestFocus();
                         return true;
                     }
                     break;
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
                     if (mEpisodesView.hasFocus() &&
-                        mEpisodesAdapter.getCurrentPosition() >= mEpisodesAdapter.getData().size() - 1) {
+                            mEpisodesAdapter.getCurrentPosition() >= mEpisodesAdapter.getData().size() - 1) {
                         return true;
                     }
                     if (mGroupsView.hasFocus() &&
@@ -167,17 +171,20 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
         if (v == this && hasFocus) {
             Log.d(TAG, "content panel has focus");
             mEpisodesView.requestFocus();
-        }
-        else if (v == mEpisodesView && hasFocus) {
+        } else if (v == mEpisodesView && hasFocus) {
 
             Log.d(TAG, "episodes has focus");
             View child = mEpisodesView.getLayoutManager().findViewByPosition(mEpisodesAdapter.getCurrentPosition());
             if (child != null) {
                 child.requestFocus();
+            } else {
+                int lastPosition = mEpisodesLayoutManager.findLastVisibleItemPosition();
+                child = mEpisodesLayoutManager.findViewByPosition(lastPosition);
+                if (child != null)
+                    child.requestFocus();
             }
-        }
-        else if (v == mGroupsView && hasFocus) {
-            Log.d(TAG,"group has focus，position:" + mGroupAdapter.getCurrentPosition());
+        } else if (v == mGroupsView && hasFocus) {
+            Log.d(TAG, "group has focus，position:" + mGroupAdapter.getCurrentPosition());
 
             View child = mGroupsView.getLayoutManager().findViewByPosition(mGroupAdapter.getCurrentPosition());
             if (child != null) {
