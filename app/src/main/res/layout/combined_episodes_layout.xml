@@ -9,13 +9,13 @@
         android:id="@+id/episodes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true" />
+        android:focusable="false"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/groups"
-        android:layout_below="@id/episodes"
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true" />
+        android:layout_below="@id/episodes"
+        android:layout_marginTop="30dp"
+        android:focusable="false"/>
 </RelativeLayout>

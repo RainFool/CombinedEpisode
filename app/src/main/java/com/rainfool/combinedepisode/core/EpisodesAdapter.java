@@ -69,6 +69,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
                     }
                 }
             });
+
         } else {
             holder.tv.setText("");
             holder.tv.setWidth(itemWidth);
@@ -90,12 +91,17 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
         return itemWidth;
     }
 
+    public List<String> getData() {
+        return mData;
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tv;
 
         public MyViewHolder(View view) {
             super(view);
             tv = (TextView) view.findViewById(R.id.item);
+            tv.setFocusable(true);
         }
     }
 

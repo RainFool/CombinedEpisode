@@ -71,6 +71,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
         return mDatas.size();
     }
 
+    public List<String> getDatas() {
+        return mDatas;
+    }
+
     public int getCurrentPosition() {
         return mCurrentPosition;
     }

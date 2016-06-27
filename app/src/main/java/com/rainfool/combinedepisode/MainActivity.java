@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 "第一集", "第二集", "第三集", "第四集", "第五集",
         };
 
-        final String[] groups = {"1-10", "11-15"};
+        final String[] groups = {"1-3", "4-6","7-9","10-13","13-15"};
 
         CombinedEpisodesAdapter<String> adapter = new CombinedEpisodesAdapter<String>() {
             @Override
@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public int getEpisodesPosition(int groupPosition) {
-                return groupPosition * 10;
+                return groupPosition * 3;
             }
 
             @Override
             public int getGroupPosition(int episodesPosition) {
-                return episodesPosition / 10;
+                return episodesPosition / 3;
             }
         };
 

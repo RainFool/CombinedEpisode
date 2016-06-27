@@ -90,6 +90,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                 Log.d(TAG, "group item " + position + " has been focused;Episodes scroll to "
                         + adapter.getEpisodesPosition(position));
                 int episodePosition = adapter.getEpisodesPosition(position);
+                mEpisodesAdapter.mCurrentPosition = episodePosition;
                 setSelectedGroup(position);
                 mEpisodesLayoutManager.scrollToPositionWithOffset(adapter.getEpisodesPosition(position), 0);
             }
@@ -103,6 +104,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                             + adapter.getGroupPosition(position) + "need be selected!");
                     mGroupLayoutManager.scrollToPosition(position);
                     setSelectedGroup(adapter.getGroupPosition(position));
+                    mGroupAdapter.mCurrentPosition = adapter.getGroupPosition(position);
                 }
             }
         });
@@ -130,7 +132,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_UP) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (event.getKeyCode()) {
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (mGroupsView.hasFocus()) {
@@ -146,6 +148,15 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
                         return true;
                     }
                     break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    if (mEpisodesView.hasFocus() &&
+                        mEpisodesAdapter.getCurrentPosition() >= mEpisodesAdapter.getData().size() - 1) {
+                        return true;
+                    }
+                    if (mGroupsView.hasFocus() &&
+                            mGroupAdapter.getCurrentPosition() >= mGroupAdapter.getDatas().size() - 1) {
+                        return true;
+                    }
             }
         }
         return super.dispatchKeyEvent(event);
@@ -160,7 +171,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
         else if (v == mEpisodesView && hasFocus) {
 
             Log.d(TAG, "episodes has focus");
-            View child = mEpisodesView.getChildAt(mEpisodesAdapter.getCurrentPosition());
+            View child = mEpisodesView.getLayoutManager().findViewByPosition(mEpisodesAdapter.getCurrentPosition());
             if (child != null) {
                 child.requestFocus();
             }
@@ -168,7 +179,7 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
         else if (v == mGroupsView && hasFocus) {
             Log.d(TAG,"group has focus，position:" + mGroupAdapter.getCurrentPosition());
 
-            View child = mGroupsView.getChildAt(mGroupAdapter.getCurrentPosition());
+            View child = mGroupsView.getLayoutManager().findViewByPosition(mGroupAdapter.getCurrentPosition());
             if (child != null) {
                 child.requestFocus();
             }
