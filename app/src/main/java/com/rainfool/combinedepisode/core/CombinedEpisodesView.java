@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.rainfool.combinedepisode.R;
+import com.rainfool.littlepopup.LittlePopup;
 
 /**
  * Created by rainfool on 16/6/22.
@@ -120,14 +121,10 @@ public class CombinedEpisodesView extends RelativeLayout implements View.OnFocus
             }
         });
 
-        mEpisodesAdapter.setOnItemLongFocusListener(new EpisodesAdapter.OnItemLongFocusListener() {
-            @Override
-            public void onEpisodesItemLongFocus(View v, int position) {
+    }
 
-                Log.d(TAG, "No Episodes Item long focus listener set!episodes item " + position);
-            }
-
-        });
+    public void setLongFocusListener(EpisodesAdapter.OnItemLongFocusListener listener) {
+        mEpisodesAdapter.setOnItemLongFocusListener(listener);
     }
 
     @Override

@@ -81,6 +81,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
                         mHandler.postDelayed(longFocusRunnable, LONG_FOCUS_TIME);
                     } else {
                         mHandler.removeCallbacks(longFocusRunnable);
+                        mLongFocusListener.onEpisodesItemLongFocus(v,position,hasFocus);
                     }
                 }
             });
@@ -150,7 +151,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
     }
 
     public interface OnItemLongFocusListener {
-        void onEpisodesItemLongFocus(View v, int position);
+        void onEpisodesItemLongFocus(View v, int position,boolean hasFocus);
     }
 
     public interface OnItemFocusListener {
@@ -169,7 +170,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.MyView
 
         @Override
         public void run() {
-            mLongFocusListener.onEpisodesItemLongFocus(v, position);
+            mLongFocusListener.onEpisodesItemLongFocus(v, position,true);
         }
     }
 }

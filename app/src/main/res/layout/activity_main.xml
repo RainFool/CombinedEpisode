@@ -7,11 +7,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/contentPanel"
     tools:context="com.rainfool.combinedepisode.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_marginTop="50dp"
+        android:id="@+id/container"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -35,4 +37,9 @@
             android:layout_weight="1"
             android:src="@drawable/media_detail_icon_arrow_right"/>
     </LinearLayout>
+
+    <com.rainfool.littlepopup.PrettyIndicateView
+        android:id="@+id/indicate_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></com.rainfool.littlepopup.PrettyIndicateView>
 </RelativeLayout>
