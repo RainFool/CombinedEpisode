@@ -15,8 +15,9 @@
         android:textColor="@android:color/white" />
 
     <ImageView
+        android:id="@+id/indicate"
         android:layout_width="wrap_content"
-        android:layout_height="14dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"
         android:src="@drawable/media_detail_aspect_box_arrow"
         android:scaleType="fitXY"/>
